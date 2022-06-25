@@ -1,16 +1,12 @@
 port=0
 dhcp-range=192.168.50.0,proxy
-pxe-service=x86PC,"PXELINUX (BIOS)",bios/pxelinux
-pxe-service=x86-64_EFI,"PXELINUX (EFI)",efi64/syslinux.efi
+
 log-queries
 log-facility=/var/log/dnsmasq.log
-# dhcp-boot=grubx64.efi,boothost,{{ ansible_default_ipv4.address }}
-# ESXi x86 EFI
-dhcp-match=set:efi64,60,PXEClient:Arch:00007
-dhcp-boot=tag:efi64,bootx64.efi,{{ ansible_default_ipv4.address }}
 
-
-
+enable-tftp
+tftp-root=/var/lib/tftpboot
+pxe-service=0,"Raspberry Pi Boot"
 
 
 # option space pxelinux;
