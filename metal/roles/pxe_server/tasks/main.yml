@@ -11,9 +11,14 @@
     cmd: "xorriso -osirrox on -indev {{ iso.dest }} -extract / {{ role_path }}/files/data/os"
     creates: "{{ role_path }}/files/data/os/.treeinfo"
 
-- name: Generate DHCP config
+#- name: Generate DHCP config
+#  ansible.builtin.template:
+#    src: dhcpd.conf.j2
+#    dest: "{{ role_path }}/files/data/pxe-config/dhcpd.conf"
+#    mode: 0644
+- name: Configure DNS Proxy
   ansible.builtin.template:
-    src: dhcpd.conf.j2
+    src: d
     dest: "{{ role_path }}/files/data/pxe-config/dhcpd.conf"
     mode: 0644
 
