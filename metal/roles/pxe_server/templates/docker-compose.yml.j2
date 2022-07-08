@@ -9,10 +9,10 @@ services:
     network_mode: host
   {% elif dhcp_mode.lower() == 'dnsmasq' %}
   dhcp:
-      build: ./dnsmasq
-      volumes:
-        - ./data/pxe-config/dnsmasq.conf:/etc/dnsmasq.conf
-      network_mode: host
+    build: ./dnsmasq
+    volumes:
+      - ./data/pxe-config/dnsmasq.conf:/etc/dnsmasq.conf
+    network_mode: host
   {% endif %}
   tftp:
     build: ./tftp
