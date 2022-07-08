@@ -1,4 +1,4 @@
-module git.khuedoan.com/khuedoan/homelab/vault/init
+module git.homelab.bourne.id/khuedoan/homelab/vault/init
 
 go 1.17
 
