@@ -27,8 +27,8 @@
 
 - name: Generate Docker Compose
   ansible.builtin.template:
-    src: docker-compose.yaml.j2
-    dest: "{{ role_path }}/files/docker-compose.yaml"
+    src: docker-compose.yml.j2
+    dest: "{{ role_path }}/files/docker-compose.yml"
     mode: 0644
 
 - name: Generate GRUB config
