@@ -25,6 +25,12 @@
     mode: 0644
   when: dhcp_mode|lower == "dnsmasq"
 
+- name: Generate Docker Compose
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
+    dest: "{{ role_path }}/files/docker-compose.yaml"
+    mode: 0644
+
 - name: Generate GRUB config
   ansible.builtin.template:
     src: grub.cfg.j2
