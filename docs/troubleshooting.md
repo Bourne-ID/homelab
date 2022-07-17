@@ -2,7 +2,7 @@
 
 ## PXE server logs
 
-To view PXE server (includes DHCP (or proxy), TFTP and HTTP server) logs:
+To view PXE server (includes DHCP, TFTP and HTTP server) logs:
 
 ```sh
 ./scripts/pxe-logs
@@ -14,7 +14,7 @@ To view PXE server (includes DHCP (or proxy), TFTP and HTTP server) logs:
 
     ```sh
     ./scripts/pxe-logs dnsmasq
-    ./scripts/pxe-logs tftp http
+    ./scripts/pxe-logs http
     ```
 
 ## Nodes not booting from the network
