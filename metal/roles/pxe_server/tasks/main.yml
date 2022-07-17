@@ -13,24 +13,43 @@
     creates: "{{ role_path }}/files/data/os/.treeinfo"
 
 ### Rocky Pi for Raspberry Pis
-- name: Download boot image
+- name: Download Rpi Image
   ansible.builtin.get_url:
     url: "{{ rpi_url }}"
-    dest: "{{ role_path }}/files/data/iso/{{ iso_url | basename }}"
+    dest: "{{ role_path }}/files/data/img/{{ rpi_url | basename }}"
     checksum: "{{ rpi_checksum }}"
     mode: 0644
+  register: rpi_xz_img
 
-- name: Decompress Compressed Boot Image
+- name: Decompress Rpi Image
   ansible.builtin.command:
-    cmd: "unxz -k {{ iso.dest }}"
-    creates: "{{ role_path }}/files/data/iso/{{ iso_url | basename | splitext | first }}"
+    cmd: "unxz -k {{ rpi_xz_img.dest }}"
+    creates: "{{ role_path }}/files/data/img/{{ rpi_url | basename | splitext | first }}"
 
-- name: Extract boot image
+- name: Extract rpi Boot and Root images
   ansible.builtin.command:
-    cmd: "xorriso -osirrox on -indev {{ iso.dest }} -extract / {{ role_path }}/files/data/os"
-    creates: "{{ role_path }}/files/data/os/.treeinfo"
+    cmd: "7z x -o{{ role_path }}/files/data/img {{ role_path }}/files/data/img/{{ rpi_url | basename | splitext | first }} 0.fat 2.img"
+    creates: "{{ role_path }}/files/data/img/2.img"
 
-- name: Generate dnsmasq config
+- name: Make Boot and Root Folders with correct permissions
+  ansible.builtin.file:
+    path: "{{ role_path }}/files/data/img/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - boot
+    - root
+
+- name: Extract rpi Boot and Root Partition
+  ansible.builtin.command:
+    cmd: "7z x -o{{ role_path }}/files/data/img/{{ item.dest }} {{ role_path }}/files/data/img/{{ item.src }}"
+    creates: "{{ role_path }}/files/data/img/{{ item.dest }}/{{ item.creates }}"
+  loop:
+    - { src: 0.fat, dest: boot, creates: start4.elf }
+    - { src: 2.img, dest: root, creates: etc/motd }
+
+# PXE templating
+- name: Generate DNSmasq config
   ansible.builtin.template:
     src: dnsmasq.conf.j2
     dest: "{{ role_path }}/files/data/pxe-config/dnsmasq.conf"
